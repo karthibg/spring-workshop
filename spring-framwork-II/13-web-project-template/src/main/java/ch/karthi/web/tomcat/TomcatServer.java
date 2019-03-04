@@ -4,7 +4,6 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 
@@ -19,7 +18,7 @@ public class TomcatServer {
 		final Tomcat tomcat = new Tomcat();
 		final Connector connector = new Connector();
 		tomcat.setConnector(connector);
-		tomcat.setPort(8080);
+		//TODO
 		tomcat.addWebapp("", Paths.get(".").toAbsolutePath().toString());
 		try {
 			tomcat.start();

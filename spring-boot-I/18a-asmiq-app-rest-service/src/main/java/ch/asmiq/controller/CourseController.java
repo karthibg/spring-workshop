@@ -2,6 +2,7 @@ package ch.asmiq.controller;
 
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,7 @@ public class CourseController {
 		this.asmiqAcademyService = asmiqAcademyService;
 	}
 
-	@GetMapping("/courses")
+	@GetMapping(value="/courses", produces= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
 	public ResponseEntity<List<Course>> courses() {
 		return ResponseEntity.ok().body(asmiqAcademyService.getCourses());
 	}
