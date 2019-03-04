@@ -1,6 +1,8 @@
 package ch.asmiq.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import ch.asmiq.model.Order;
 @Service
 public class AsmiqAcademyService {
 
+	private static final Logger LOG = Logger.getLogger(AsmiqAcademyService.class.getName());
+
 	private CourseService courseService;
 	private NotificationService notificationService;
 	private PaymentService paymentService;
@@ -24,67 +28,55 @@ public class AsmiqAcademyService {
 	private ExamService examService;
 	private CertificationService certificationService;
 
+	@Autowired
+	public void setCourseService(final CourseService courseService) {
+		this.courseService = courseService;
+	}
+
+	@Autowired
+	public void setNotificationService(final NotificationService notificationService) {
+		this.notificationService = notificationService;
+	}
+
+	@Autowired
+	public void setPaymentService(final PaymentService paymentService) {
+		this.paymentService = paymentService;
+	}
+
+	@Autowired
+	public void setFeedBackService(final FeedbackService feedBackService) {
+		this.feedBackService = feedBackService;
+	}
+
+	@Autowired
+	public void setExamService(final ExamService examService) {
+		this.examService = examService;
+	}
+
+	@Autowired(required = false)
+	public void setCertificationService(final CertificationService certificationService) {
+		this.certificationService = certificationService;
+	}
+
+	public Optional<CertificationService> getCertificationService() {
+		return Optional.ofNullable(certificationService);
+	}
+
+	// ------------------------------------------------------------------------------------------------------
+
 	public List<Course> getCourses() {
 		return courseService.getCourses();
 	}
 
-	public void placeOrder(Order order) {
+	public void placeOrder(final Order order) {
 		notificationService.sendNotification(order);
 		paymentService.doPay(order);
 	}
 
-	public CourseService getCourseService() {
-		return courseService;
-	}
+	public void downloadCertificate(final Order order) {
 
-	@Autowired
-	public void setCourseService(CourseService courseService) {
-		this.courseService = courseService;
-	}
+		getCertificationService().ifPresentOrElse(cs -> cs.downloadCertificate(order),
+				() -> LOG.info("Certification Service NOT Available!"));
 
-	public NotificationService getNotificationService() {
-		return notificationService;
 	}
-
-	@Autowired
-	public void setNotificationService(NotificationService notificationService) {
-		this.notificationService = notificationService;
-	}
-
-	public PaymentService getPaymentService() {
-		return paymentService;
-	}
-
-	@Autowired
-	public void setPaymentService(PaymentService paymentService) {
-		this.paymentService = paymentService;
-	}
-
-	public FeedbackService getFeedBackService() {
-		return feedBackService;
-	}
-
-	@Autowired
-	public void setFeedBackService(FeedbackService feedBackService) {
-		this.feedBackService = feedBackService;
-	}
-
-	public ExamService getExamService() {
-		return examService;
-	}
-
-	@Autowired
-	public void setExamService(ExamService examService) {
-		this.examService = examService;
-	}
-
-	public CertificationService getCertificationService() {
-		return certificationService;
-	}
-
-	@Autowired(required=false)
-	public void setCertificationService(CertificationService certificationService) {
-		this.certificationService = certificationService;
-	}
-
 }
