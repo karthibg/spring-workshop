@@ -6,8 +6,6 @@ public class WebTemplateApp {
 
 	public static void main(String[] args) {
 		TomcatServer.startTomcat();
-	}
-
-	
+	}	
 
 }
